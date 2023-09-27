@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
  * @author 김무준
  *
  */
-public class BJ_14500_테트로미노 {
+public class BJ_14500_테트로미노_김무준 {
 
 	static int n, m, res;
 	static int[][] arr;
