@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 /*
  * 복잡하게 생각해서 긴 고민 후 답 참고함
  * 크게 F_ 가 있는 경우와 없는 경우로 나누고, 각각 가능한 경우를 잘 따지기  
+ * 11516 kb 76 ms 
  */
 
 public class Main {
