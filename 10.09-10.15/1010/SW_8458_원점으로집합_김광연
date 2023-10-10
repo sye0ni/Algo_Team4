@@ -1,0 +1,72 @@
+/**
+ * 
+ */
+package algorithm1010;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/**
+ * @author 김광연
+ * 
+ * SW_8458_원점으로집합_김광연
+ * 메모리 32,312 kb 시간 208 ms
+ * 아이디어
+ * 구현문제 => 수학적 사고력?
+ * 우선 주어진 모든 수가 원점에 도달할 수 있게 하려면 주어진 수들이 모두 짝수이거나 모두 홀수여야함. 짝수와 홀수가 섞여있으면 안됨
+ * 왜냐하면 원점까지의 가는데 짝수일 때와 홀수일 때 타이밍이 맞지 않음 => 한번 0 찍고 나면 그 차가 짝수여야 원점에 도달 가능
+ * 따라서 우선 주어진 수들이 짝수인지 홀수인지 구해서 섞여있을 때는 바로 -1 출력
+ * 한 가지로만 있을 때는 각 숫자들의 원점까지의 거리를 구해서 저장하고 가장 큰 거리를 갖는 수를 변수에 저장
+ * cnt를 0부터 시작해 +1해주고 거리의 최대값보다 같거나 커지면서 cnt의 합과의 차가 짝수인 경우 해당 cnt를 출력함
+ * 이때, 가장 큰 수가 아니라 다른 수가 원점으로 가는데 더 오래 걸릴 수도 있지 않을까 하고 반례를 찾아봤는데 모든 수가 짝수 혹은 홀수이므로 그런 상황은 나올 수 없음
+ */
+public class SW_8458_원점으로집합_김광연 {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+		
+		int T = Integer.parseInt(br.readLine());
+		for (int tc = 1; tc <= T; tc++) {
+			sb.append("#").append(tc).append(" "); // 출력 양식 저장
+			int N = Integer.parseInt(br.readLine()); // 격자점 개수
+			int[][] board = new int[N][2]; // 격자점 좌표 저장할 배열
+			int[] dis = new int[N]; // 각 격자점의 원점까지의 거리 저장할 배열
+			int max = 0; // 최대값 저장할 배열
+			
+			for (int i = 0; i < N; i++) {
+				st = new StringTokenizer(br.readLine());
+				board[i][0] = Integer.parseInt(st.nextToken()); // x좌표
+				board[i][1] = Integer.parseInt(st.nextToken()); // y좌표
+				
+				dis[i] = Math.abs(board[i][0]) + Math.abs(board[i][1]); // 원점까지의 거리
+				max = Math.max(max, dis[i]); // 최대값 구하기
+			}
+			int flag = 0; // 짝수 홀수 섞여있는지 판별할 변수
+			for (int i = 0; i < N-1; i++) {
+				if ((dis[i]%2) != (dis[i+1]%2)) { // 2로 나눈 나머지가 둘이 다르면
+					flag = -1; // -1로 바꿔주고
+					break; // 탈출
+				}
+			}
+			if (flag == -1) { // -1이면 
+				sb.append(-1).append("\n"); // 출력
+				continue; // 다음 테케로
+			}
+			
+			long sum = 0; // 총합 저장할 변수 => 최대 10^9인 수를 더하므로 long 타입으로 지정
+			int cnt = 0; // sum에 더할 변수
+			while (true) {
+				sum += cnt; 
+				if (sum >= max && (max - sum) % 2 == 0) { // 총합이 최대값보다 커지고 둘의 차가 짝수 => 원점으로 가능
+					break; // 탈출
+				}
+				cnt++; // 아니면 cnt+1 
+			}			
+			sb.append(cnt).append("\n"); // 출력
+		}
+		System.out.println(sb);
+	}
+}
