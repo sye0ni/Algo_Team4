@@ -1,0 +1,70 @@
+package algorithm1101;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class BJ6137_문자열생성_김광연 {
+	/**
+	 * @author kwang
+	 * 
+	 * BJ6137_문자열생성_김광연
+	 * 메모리 11680 kb 76 ms
+	 * 아이디어
+	 * 투포인터 활용. 양쪽에서 인덱스 줄여나가면서 해결
+	 * 비슷한 문제를 풀어본 적이 있어서 아이디어는 금방 떠올랐는데 두 문자가 같은 경우에서 실수
+	 * 유의할 점은 두 문자가 같을 때 이후의 문자들을 비교한 후 더 작은 문자를 찾으면 해당 포인터의 처음 시작한 곳의 문자를 추가하고 다시 비교해야함
+	 */
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		
+		int N = Integer.parseInt(br.readLine()); // 문자열의 길이
+		char[] arr = new char[N]; // 문자열을 담을 char 배열
+		for (int i = 0; i < N; i++) { // char배열에 주어진 문자열 담기
+			arr[i] = br.readLine().charAt(0); // String으로 받고 첫번째 char를 저장
+		}
+		
+		int start = 0; // 0에서 시작하는 포인터
+		int end = N-1; // N-1에서 시작하는 포인터
+		int si = 0; // 중간에 임시로 왼쪽 포인터 값을 저장할 변수
+		int ei = 0; // 중간에 임시로 오른쪽 포인터 값을 저장할 변수
+		int cnt = 0;
+		while (start <= end) {
+			if (arr[start] < arr[end]) { // 왼쪽 포인터에 있는 문자가 오른쪽 포인터에 있는 문자보다 먼저 오는 경우 
+				sb.append(arr[start++]); // 출력양식에 추가하고 왼쪽 포인터 1 증가
+				cnt++; // 개수도 1 증가
+			} else if (arr[start] > arr[end]) { // 오른쪽 포인터가 더 먼저 오는 경우
+				sb.append(arr[end--]); // 출력양식에 추가하고 오른쪽 포인터 1 감소
+				cnt++; // 개수 1 증가
+			} else { // 두 문자가 같은 경우
+				si = start; // 왼쪽 포인터의 시작점
+				ei = end; // 오른쪽 포인터의 시작점
+				int flag = 0; // 문자가 추가됐는지 확인할 변수
+				while (si <= ei) { 
+					if (arr[si] < arr[ei]) { // 왼쪽이 더 먼저 오면
+						sb.append(arr[start++]); // 왼쪽 포인터의 시작점을 출력양식에 추가하고 1 증가
+						cnt++; // 개수 1 증가
+						flag = 1; // 문자가 추가됐으니 1
+						break; // 반복문 탈출
+					} else if (arr[si] > arr[ei]) { // 오른쪽이 더 먼저면
+						sb.append(arr[end--]); // 오른쪽 포인터의 시작점을 양식에 추가하고 1 감소
+						cnt++; 
+						flag = 1;
+						break;
+					} else { // 두 문자가 같으면 양 포인터 +1, -1 해주기
+						si++; 
+						ei--;
+					}
+				}
+				if (flag == 0) { // 문자가 추가 X => 양 포인터의 문자가 계속 같음
+					sb.append(arr[start++]); // 이럴때는 그냥 아무거나 양식에 추가하고 개수 1 증가
+					cnt++;
+				}				
+			}
+			if ((cnt%80) == 0) { // 양식에 추가한 문자의 개수가 80의 배수면 다음 줄에서 이어서 출력
+				sb.append("\n");
+			}
+		}
+		System.out.println(sb);		
+	}
+}
